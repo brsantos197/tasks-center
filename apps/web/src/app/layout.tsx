@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "@tasks-center/ui/global.css";
+import NextAuthSessionProvider from "../providers/SessionProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -14,9 +15,11 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (  
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
-    </html>
+  return (
+    <NextAuthSessionProvider>
+      <html lang="pt-br" className="h-screen">
+        <body className={`${inter.className} h-screen`}>{children}</body>
+      </html>
+    </NextAuthSessionProvider>
   );
 }
