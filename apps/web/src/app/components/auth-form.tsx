@@ -35,7 +35,11 @@ export const AuthForm = () => {
         Login with Google
       </Button>
 
-      <Button variant="outline" className="w-full gap-2">
+      <Button
+        variant="outline"
+        className="w-full gap-2"
+        onClick={() => signIn("github")}
+      >
         <FaGithub />
         Login with Github
       </Button>
