@@ -30,7 +30,11 @@ export const AuthForm = () => {
       <Button type="submit" className="w-full">
         Login
       </Button>
-      <Button variant="outline" className="w-full gap-2">
+      <Button
+        variant="outline"
+        className="w-full gap-2"
+        onClick={() => signIn("google")}
+      >
         <FcGoogle />
         Login with Google
       </Button>

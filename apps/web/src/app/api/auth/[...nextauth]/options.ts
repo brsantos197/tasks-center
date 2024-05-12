@@ -1,4 +1,5 @@
 import { AuthOptions } from "next-auth";
+import GoogleProvider, { GoogleProfile } from "next-auth/providers/google";
 
 export const options: AuthOptions = {
   pages: {
@@ -14,5 +15,10 @@ export const options: AuthOptions = {
       return token;
     },
   },
-  providers: [],
+  providers: [
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    })
+  ],
 };
