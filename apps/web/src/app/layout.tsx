@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "@tasks-center/ui/global.css";
-import NextAuthSessionProvider from "../providers/SessionProvider";
+import NextAuthSessionProvider from "../providers/session.provider";
+import { ThemeProvider } from "@tasks-center/ui/theme/theme.provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,9 +18,11 @@ export default function RootLayout({
 }>) {
   return (
     <NextAuthSessionProvider>
-      <html lang="pt-br" className="h-screen">
-        <body className={`${inter.className} h-screen`}>{children}</body>
-      </html>
+      <ThemeProvider disableTransitionOnChange>
+        <html lang="pt-br" className="h-screen ">
+          <body className={`${inter.className} h-screen`}>{children}</body>
+        </html>
+      </ThemeProvider>
     </NextAuthSessionProvider>
   );
 }
