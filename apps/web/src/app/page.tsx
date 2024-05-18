@@ -81,6 +81,7 @@ import {
   TooltipTrigger,
 } from "@tasks-center/ui/components/ui/tooltip";
 import { Account } from "./components/account";
+import { ThemeToggle } from "./components/theme-toggle";
 
 export default function Dashboard() {
   return (
@@ -254,6 +255,7 @@ export default function Dashboard() {
                 className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[320px]"
               />
             </div>
+            <ThemeToggle />
             <Account />
           </header>
           <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-3 xl:grid-cols-3">
