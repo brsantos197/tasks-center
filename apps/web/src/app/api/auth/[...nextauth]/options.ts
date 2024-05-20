@@ -9,6 +9,14 @@ export const options: AuthOptions = {
     error: "/auth/signin",
   },
   callbacks: {
+    async redirect({ url, baseUrl }) {
+      if (url.startsWith(baseUrl)) {
+        return `${baseUrl}`;
+      } else if (url.startsWith("/")) {
+        return `${baseUrl}${url}`;
+      }
+      return baseUrl;
+    },
     async session({ session, token }) {
       return session;
     },

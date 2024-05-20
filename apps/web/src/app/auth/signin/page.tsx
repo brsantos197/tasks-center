@@ -1,9 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
+import { options } from "../../api/auth/[...nextauth]/options";
 import { AuthForm } from "../../components/auth-form";
 
 export default async function SignIn() {
+  const session = await getServerSession(options);
+  if (session) {
+    redirect("/");
+  }
   return (
     <div className="w-full h-screen lg:grid lg:min-h-[600px] lg:grid-cols-2 xl:min-h-[800px]">
       <div className="flex items-center justify-center py-12">
