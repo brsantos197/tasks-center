@@ -1,0 +1,1 @@
+module.exports = require('@tasks-center/ui/postcss.config');
