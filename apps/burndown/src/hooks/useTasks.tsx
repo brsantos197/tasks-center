@@ -19,7 +19,7 @@ const TasksContext = createContext({} as {
 })
 
 export const TaskProvider = ({ children }: { children: ReactNode }) => {
-  const [tasks, setTasks] = useState<Task[]>(JSON.parse(localStorage.getItem("tasks") || "[]") || [])
+  const [tasks, setTasks] = useState<Task[]>([])
 
   const addTask = ({ text, score }: Pick<Task, "text" | "score">) => {
     setTasks(state => [...state, {
@@ -43,8 +43,17 @@ export const TaskProvider = ({ children }: { children: ReactNode }) => {
   }
 
   useEffect(() => {
-    localStorage.setItem("tasks", JSON.stringify(tasks))
+    if (!tasks.length) {
+      setTasks(JSON.parse(localStorage.getItem("tasks") || "[]"))
+    }
+  }, [])
+
+  useEffect(() => {
+    if (tasks.length) {
+      localStorage.setItem("tasks", JSON.stringify(tasks))
+    }
   }, [tasks])
+
   return (
     <TasksContext.Provider value={{
       tasks,
