@@ -90,7 +90,7 @@ export function BurndownChart({ config = chartConfig, ...props }: BurndownChartP
             />
             <Line
               dataKey="ideal"
-              type="natural"
+              type="monotone"
               stroke="var(--color-ideal)"
               strokeWidth={2}
               dot={{
@@ -109,7 +109,7 @@ export function BurndownChart({ config = chartConfig, ...props }: BurndownChartP
             </Line>
             <Line
               dataKey="real"
-              type="natural"
+              type="monotone"
               stroke="var(--color-real)"
               strokeWidth={2}
               dot={{
