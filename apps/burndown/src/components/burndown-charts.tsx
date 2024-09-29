@@ -39,7 +39,7 @@ interface BurndownChartProps extends ComponentProps<typeof Card> {
 //
 export function BurndownChart({ config = chartConfig, ...props }: BurndownChartProps) {
   const [dates, setDates] = useState<Date[]>([])
-  const { tasks } = useTasks()
+  const { tasksConfig: { tasks, startDate, endDate }, setEndDate, setStartDate } = useTasks()
   const calculateIdeal = () => {
     const totalWork = tasks.reduce((acc, curr) => acc + curr.score, 0);
     return dates.reduce<{ day: string; ideal: number; real: number }[]>((acc, day, i) => {
@@ -47,7 +47,7 @@ export function BurndownChart({ config = chartConfig, ...props }: BurndownChartP
         day: day.getDate().toString(),
         ideal: Math.round(totalWork - (totalWork / dates.length) * i),
         real: tasks.reduce((acc, curr) => {
-          if (new Date(curr.endDate!).getMilliseconds() <= day.getMilliseconds() && curr.completed) {
+          if (new Date(curr.endDate!).getTime() <= day.getTime() && curr.completed) {
             return acc - curr.score
           }
           return acc
@@ -61,9 +61,15 @@ export function BurndownChart({ config = chartConfig, ...props }: BurndownChartP
     <Card {...props}>
       <CardHeader>
         <CardTitle className="text-2xl mb-4">Gráfico de Burndown</CardTitle>
-        <DatePickerWithRange from={new Date()} onSelectDate={(newDates) => {
-          setDates(newDates)
-        }}/>
+        {
+          startDate && (
+            <DatePickerWithRange from={new Date(startDate)} to={new Date(endDate)} onSelectDate={(newDates) => {
+              setStartDate(newDates[0].toISOString())
+              setEndDate(newDates[newDates.length - 1].toISOString())
+              setDates(newDates)
+            }}/>
+          )
+        }
       </CardHeader>
       <CardContent>
         <ChartContainer config={config}>

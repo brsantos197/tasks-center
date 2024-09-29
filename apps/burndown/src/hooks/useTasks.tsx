@@ -11,55 +11,119 @@ export interface Task {
 
 
 const TasksContext = createContext({} as {
-  tasks: Task[]
+  tasksConfig: {
+    startDate: string
+    endDate: string
+    tasks: Task[]
+  }
   addTask: ({ text, score }: Pick<Task, "text" | "score">) => void
   removeTask: (id: Task["id"]) => void
   toggleTask: (id: Task["id"]) => void
-  setEndDate: (id: Task["id"], endDate: Task["endDate"]) => void
+  setTaskEndDate: (id: Task["id"], endDate: Task["endDate"]) => void
+  setStartDate: (startDate: string) => void
+  setEndDate: (endDate: string) => void
 })
 
 export const TaskProvider = ({ children }: { children: ReactNode }) => {
-  const [tasks, setTasks] = useState<Task[]>([])
+  const [tasksConfig, setTasksConfig] = useState<{
+    startDate: string
+    endDate: string
+    tasks: Task[]
+  }>({
+    startDate: '',
+    endDate: '',
+    tasks: [],
+  })
 
   const addTask = ({ text, score }: Pick<Task, "text" | "score">) => {
-    setTasks(state => [...state, {
-      id: crypto.randomUUID(),
-      text,
-      completed: false,
-      score
-    }])
+    setTasksConfig(({ tasks, ...state}) => {
+      return {
+        ...state,
+        tasks: [...tasks, {
+          id: crypto.randomUUID(),
+          text,
+          completed: false,
+          score
+        }]
+      }
+    })
   }
 
   const removeTask = (id: Task["id"]) => {
-    setTasks(state => state.filter(task => task.id !== id))
+    setTasksConfig(state => {
+      return {
+        ...state,
+        tasks: state.tasks.filter(task => task.id !== id)
+
+      }
+    })
   }
 
   const toggleTask = (id: Task["id"]) => {
-    setTasks(state => state.map(task => task.id === id ? { ...task, completed: !task.completed, endDate: !task.completed ? new Date().toISOString() : undefined } : task))
+    setTasksConfig(state => {
+      return {
+        ...state,
+        tasks: state.tasks.map(task => task.id === id ? { ...task, completed: !task.completed, endDate: !task.completed ? new Date().toISOString() : undefined } : task)
+      }
+    })
   }
 
-  const setEndDate = (id: Task["id"], endDate: Task["endDate"]) => {
-    setTasks(state => state.map(task => task.id === id ? { ...task, endDate, completed: true } : task))
+  const setTaskEndDate = (id: Task["id"], endDate: Task["endDate"]) => {
+    setTasksConfig(state => {
+      return {
+        ...state,
+        tasks: state.tasks.map(task => task.id === id ? { ...task, endDate, completed: true } : task)
+      }
+    })
+  }
+
+  const setStartDate = (startDate: string) => {
+    localStorage.setItem("startDate", startDate)
+    setTasksConfig(state => {
+      return {
+        ...state,
+        startDate
+      }
+    })
+  }
+
+  const setEndDate = (endDate: string) => {
+    localStorage.setItem("endDate", endDate)
+    setTasksConfig(state => {
+      return {
+        ...state,
+        endDate
+      }
+    })
   }
 
   useEffect(() => {
-    if (!tasks.length) {
-      setTasks(JSON.parse(localStorage.getItem("tasks") || "[]"))
+    if (!tasksConfig.tasks.length) {
+      setTasksConfig({
+        startDate: localStorage.getItem("startDate") || new Date().toISOString(),
+        endDate: localStorage.getItem("endDate") || new Date().toISOString(),
+        tasks: JSON.parse(localStorage.getItem("tasks") || "[]"),
+      })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
-    if (tasks.length) {
-      localStorage.setItem("tasks", JSON.stringify(tasks))
+    if (tasksConfig.tasks.length) {
+      localStorage.setItem("tasks", JSON.stringify(tasksConfig.tasks))
     }
-  }, [tasks])
+  }, [tasksConfig])
+
+  console.log(tasksConfig)
 
   return (
     <TasksContext.Provider value={{
-      tasks,
+      tasksConfig: tasksConfig,
       addTask,
       removeTask,
       toggleTask,
+      setTaskEndDate,
+      setStartDate,
       setEndDate
     }}>
       {children}

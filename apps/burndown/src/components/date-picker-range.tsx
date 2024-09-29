@@ -18,16 +18,18 @@ import { CalendarIcon } from "lucide-react";
 
 interface DatePickerProps extends React.HTMLAttributes<HTMLDivElement> {
  from: Date
+ to?: Date
  onSelectDate: (date: Date[]) => void
 }
 export function DatePickerWithRange({
   className,
   from,
+  to,
   onSelectDate
 }: DatePickerProps) {
   const [date, setDate] = React.useState<DateRange | undefined>({
     from,
-    to: addDays(from, 7),
+    to: to ?? addDays(from, 7),
   })
 
   React.useEffect(() => {
@@ -39,7 +41,7 @@ export function DatePickerWithRange({
       
       onSelectDate(days)
     }
-  }, [date])
+  }, [date, onSelectDate])
 
   return (
     <div className={cn("grid gap-2", className)}>

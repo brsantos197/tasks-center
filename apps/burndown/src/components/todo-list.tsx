@@ -13,7 +13,7 @@ interface TodoListProps extends ComponentProps<typeof Card> {
   title: string
 }
 export default function TodoList({title, ...props}: TodoListProps) {
-  const { addTask, removeTask, toggleTask, tasks, setEndDate } = useTasks()
+  const { addTask, removeTask, toggleTask, tasksConfig: { tasks }, setTaskEndDate } = useTasks()
 
   const [newTodo, setNewTodo] = useState<Omit<Task, "id" | "completed">>({
     score: 1,
@@ -73,7 +73,7 @@ export default function TodoList({title, ...props}: TodoListProps) {
               <DatePicker 
                 className="ml-auto"
                 placeholder="Data de término"
-                onSelectDate={date => setEndDate(task.id, date.toISOString())}
+                onSelectDate={date => setTaskEndDate(task.id, date.toISOString())}
                 defaultDate={task.endDate ? new Date(task.endDate) : undefined}
               />
               <Button
