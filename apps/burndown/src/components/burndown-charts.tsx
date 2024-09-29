@@ -45,7 +45,7 @@ export function BurndownChart({ config = chartConfig, ...props }: BurndownChartP
     return dates.reduce<{ day: string; ideal: number; real: number }[]>((acc, day, i) => {
       acc.push({
         day: day.getDate().toString(),
-        ideal: totalWork - (totalWork / dates.length) * i,
+        ideal: Math.round(totalWork - (totalWork / dates.length) * i),
         real: tasks.reduce((acc, curr) => {
           if (new Date(curr.endDate!).getMilliseconds() <= day.getMilliseconds() && curr.completed) {
             return acc - curr.score
