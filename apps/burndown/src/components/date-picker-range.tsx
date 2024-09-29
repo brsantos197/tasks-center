@@ -41,7 +41,7 @@ export function DatePickerWithRange({
       
       onSelectDate(days)
     }
-  }, [date, onSelectDate])
+  }, [date])
 
   return (
     <div className={cn("grid gap-2", className)}>
